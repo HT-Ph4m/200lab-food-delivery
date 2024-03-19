@@ -27,7 +27,7 @@ func (biz *createRestaurantBiz) CreateRestaurant(context context.Context, data *
 	}
 
 	if err := biz.store.Create(context, data); err != nil {
-		return common.ErrCannotCreateEntity(restaurantmodel.EmtityName, err)
+		return common.ErrCannotCreateEntity(restaurantmodel.EntityName, err)
 	}
 
 	return nil

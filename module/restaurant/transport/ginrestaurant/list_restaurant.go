@@ -13,8 +13,11 @@ import (
 
 func ListRestaurant(appctx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
+
 		db := appctx.GetMaiDBConnection()
+
 		var pagingData common.Paging
+
 		if err := c.ShouldBind(&pagingData); err != nil {
 			panic(common.ErrInvalidRequest(err))
 		}

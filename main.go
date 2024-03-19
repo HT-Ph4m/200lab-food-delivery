@@ -4,7 +4,6 @@ import (
 	"200lab-project-1/component/appctx"
 	"200lab-project-1/middleware"
 	"200lab-project-1/module/restaurant/transport/ginrestaurant"
-	"os"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
@@ -13,8 +12,9 @@ import (
 
 func main() {
 	// refer https://github.com/go-sql-driver/mysql#dsn-data-source-name for details
-	// "food_delivery:12345678@tcp(127.0.0.1:3307)/food_delivery?charset=utf8mb4&parseTime=True&loc=Local"
-	dsn := os.Getenv("MY_CONN")
+	const MY_CONN = "food_delivery:12345678@tcp(localhost:3307)/food_delivery?charset=utf8mb4&parseTime=True&loc=Local"
+	// dsn := os.Getenv(MY_CONN)
+	dsn := MY_CONN
 	db, _ := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	db = db.Debug()

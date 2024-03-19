@@ -32,17 +32,17 @@ func (biz *deleteRestaurantBiz) DeleteRestaurant(context context.Context, id int
 
 	if err != nil {
 		if err != gorm.ErrInvalidDB {
-			return common.ErrEntityNotFound(restaurantmodel.EmtityName, err)
+			return common.ErrEntityNotFound(restaurantmodel.EntityName, err)
 		}
 		return common.ErrDB(err)
 	}
 
 	if oldData.Status == 0 {
-		return common.ErrEntityDeleted(restaurantmodel.EmtityName, nil)
+		return common.ErrEntityDeleted(restaurantmodel.EntityName, nil)
 	}
 
 	if err := biz.store.Delete(context, id); err != nil {
-		return common.ErrCannotDeleteEntity(restaurantmodel.EmtityName, err)
+		return common.ErrCannotDeleteEntity(restaurantmodel.EntityName, err)
 	}
 	return nil
 }

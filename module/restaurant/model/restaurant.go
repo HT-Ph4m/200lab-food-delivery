@@ -9,9 +9,9 @@ import (
 type RestaurantType string
 
 const (
-	TypeNomal   RestaurantType = "normal"
+	TypeNormal  RestaurantType = "normal"
 	TypePremium RestaurantType = "premium"
-	EmtityName                 = "Restaurant"
+	EntityName                 = "Restaurant"
 )
 
 type Restaurant struct {
@@ -21,7 +21,7 @@ type Restaurant struct {
 	Type            RestaurantType `json:"type" gorm:"column:type;"` //tag
 }
 
-func (data *Restaurant) Mask(isAdminOrOner bool) {
+func (data *Restaurant) Mask(isAdminOrOwner bool) {
 	data.GenUID(common.DbTypeRestaurant)
 }
 

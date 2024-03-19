@@ -1,0 +1,3 @@
+package ginrestaurant
+
+func FindDataWithCondition()
