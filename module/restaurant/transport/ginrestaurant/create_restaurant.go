@@ -25,12 +25,13 @@ func CreateRestaurant(appctx appctx.AppContext) gin.HandlerFunc {
 		store := restaurantstorage.NewSQLStore(db)
 		biz := restaurantbiz.NewCreateRestaurantBiz(store)
 
-		if err := biz.CreateRestaurant(c.Request.Context(), &data); err != nil {
+		restaurant, err := biz.CreateRestaurant(c.Request.Context(), &data)
+		if err != nil {
 			panic(err)
 		}
 
 		data.Mask(false)
 
-		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data.FakeId.String()))
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(restaurant))
 	}
 }

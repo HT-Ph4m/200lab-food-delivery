@@ -4,15 +4,22 @@ import (
 	"200lab-project-1/common"
 	"200lab-project-1/component/appctx"
 	restaurantbiz "200lab-project-1/module/restaurant/biz"
+	restaurantmodel "200lab-project-1/module/restaurant/model"
 	restaurantstorage "200lab-project-1/module/restaurant/storage"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func FindDataWithCondition(appctx appctx.AppContext) gin.HandlerFunc {
+func UpdateRestaurant(appctx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := appctx.GetMaiDBConnection()
+
+		var data restaurantmodel.RestaurantUpdate
+
+		if err := c.ShouldBind(&data); err != nil {
+			panic(err)
+		}
 
 		uid, err := common.FromBase58(c.Param("id"))
 
@@ -22,16 +29,17 @@ func FindDataWithCondition(appctx appctx.AppContext) gin.HandlerFunc {
 
 		store := restaurantstorage.NewSQLStore(db)
 
-		biz := restaurantbiz.NewFindRestaurantBiz(store)
+		biz := restaurantbiz.NewUpdateRestaurantBiz(store)
 
-		result, err := biz.FindRestaurant(c.Request.Context(), int(uid.GetLocalID()))
+		restaurant, err := biz.UpdateRestaurant(c.Request.Context(), int(uid.GetLocalID()), &data)
 
 		if err != nil {
 			panic(err)
 		}
 
-		result.Mask(false)
+		restaurant.Mask(false)
 
-		c.JSON(http.StatusOK, result)
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(restaurant))
+
 	}
 }

@@ -20,13 +20,13 @@ type findRestaurantBiz struct {
 	store FindRestaurantStore
 }
 
-func NewFinRestaurantBiz(store FindRestaurantStore) *findRestaurantBiz {
+func NewFindRestaurantBiz(store FindRestaurantStore) *findRestaurantBiz {
 	return &findRestaurantBiz{
 		store: store,
 	}
 }
 
-func (biz *findRestaurantBiz) FindRestaurant(ctx context.Context, id string) (*restaurantmodel.Restaurant, error) {
+func (biz *findRestaurantBiz) FindRestaurant(ctx context.Context, id int) (*restaurantmodel.Restaurant, error) {
 	result, err := biz.store.FindDataWithCondition(ctx, map[string]interface{}{"id": id})
 	if err != nil {
 		if err != gorm.ErrInvalidDB {

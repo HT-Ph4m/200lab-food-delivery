@@ -53,8 +53,9 @@ func (data *RestaurantCreate) Mask(isAdminOrOner bool) {
 func (RestaurantCreate) TableName() string { return Restaurant{}.TableName() }
 
 type RestaurantUpdate struct {
-	Name *string `json:"name" gorm:"column:name;"` //tag
-	Addr *string `json:"addr" gorm:"column:addr;"` //tag
+	common.SQLModel `json:",inline"`
+	Name            *string `json:"name" gorm:"column:name;"` //tag
+	Addr            *string `json:"addr" gorm:"column:addr;"` //tag
 }
 
 func (RestaurantUpdate) TableName() string { return Restaurant{}.TableName() }

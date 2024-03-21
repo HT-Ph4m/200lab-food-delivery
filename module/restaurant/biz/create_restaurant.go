@@ -20,15 +20,15 @@ func NewCreateRestaurantBiz(store CreateRestaurantStore) *createRestaurantBiz {
 	}
 }
 
-func (biz *createRestaurantBiz) CreateRestaurant(context context.Context, data *restaurantmodel.RestaurantCreate) error {
+func (biz *createRestaurantBiz) CreateRestaurant(context context.Context, data *restaurantmodel.RestaurantCreate) (*restaurantmodel.RestaurantCreate, error) {
 	// emplement logic here
 	if err := data.Validate(); err != nil {
-		return common.ErrInvalidRequest(err)
+		return data, common.ErrInvalidRequest(err)
 	}
 
 	if err := biz.store.Create(context, data); err != nil {
-		return common.ErrCannotCreateEntity(restaurantmodel.EntityName, err)
+		return data, common.ErrCannotCreateEntity(restaurantmodel.EntityName, err)
 	}
 
-	return nil
+	return data, nil
 }
