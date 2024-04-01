@@ -12,7 +12,7 @@ import (
 
 func FindDataWithCondition(appctx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		db := appctx.GetMaiDBConnection()
+		db := appctx.GetMainDBConnection()
 
 		uid, err := common.FromBase58(c.Param("id"))
 

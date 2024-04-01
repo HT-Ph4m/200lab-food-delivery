@@ -2,8 +2,12 @@ package main
 
 import (
 	"200lab-project-1/component/appctx"
+	"200lab-project-1/component/uploadprovider"
 	"200lab-project-1/middleware"
 	"200lab-project-1/module/restaurant/transport/ginrestaurant"
+	"200lab-project-1/module/upload/uploadtransport/ginupload"
+	"200lab-project-1/module/user/usertransport/ginuser"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
@@ -12,16 +16,24 @@ import (
 
 func main() {
 	// refer https://github.com/go-sql-driver/mysql#dsn-data-source-name for details
-	const MY_CONN = "food_delivery:12345678@tcp(localhost:3307)/food_delivery?charset=utf8mb4&parseTime=True&loc=Local"
-	// dsn := os.Getenv(MY_CONN)
-	dsn := MY_CONN
+	dsn := os.Getenv("MY_CONN_STRING")
+
+	s3BucketName := os.Getenv("S3BucketName")
+	s3Region := os.Getenv("S3Region")
+	s3APIKey := os.Getenv("S3APIKey")
+	s3SecretKey := os.Getenv("S3SecretKey")
+	s3Domain := os.Getenv("S3Domain")
+	secretKey := os.Getenv("SYSTEM_SECRET")
+
+	s3Provider := uploadprovider.NewS3Provider(s3BucketName, s3Region, s3APIKey, s3SecretKey, s3Domain)
+
 	db, _ := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	db = db.Debug()
 
 	r := gin.Default()
 
-	appctx := appctx.NewAppContext(db)
+	appctx := appctx.NewAppContext(db, s3Provider, secretKey)
 
 	r.Use(middleware.Recover(appctx))
 
@@ -30,6 +42,7 @@ func main() {
 	// 		"message": "pong",
 	// 	})
 	// })
+	// r.Static("static", "./static")
 
 	v1 := r.Group("/v1")
 
@@ -49,6 +62,15 @@ func main() {
 
 	// Get one restaurant
 	restaurant.GET("/:id", ginrestaurant.FindDataWithCondition(appctx))
+
+	// Upload
+	v1.POST("/upload", ginupload.Upload(appctx))
+
+	v1.POST("/register", ginuser.Register(appctx))
+
+	v1.POST("/authenticate", ginuser.Login(appctx))
+
+	v1.GET("/profile", middleware.RequireAuth(appctx), ginuser.GetProfile(appctx))
 
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 	// Update

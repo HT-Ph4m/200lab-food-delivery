@@ -16,10 +16,10 @@ const (
 	DbTypeUser       = 4
 )
 
-// const CurrentUser = "user"
+const CurrentUser = "user"
 
-// type Requester interface {
-// 	GetUserId() int
-// 	GetEmail() string
-// 	GetRole() string
-// }
+type Requester interface {
+	GetUserId() int
+	GetEmail() string
+	GetRole() string
+}

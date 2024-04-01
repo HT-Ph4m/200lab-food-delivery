@@ -1,15 +1,35 @@
 package appctx
 
-import "gorm.io/gorm"
+import (
+	"200lab-project-1/component/uploadprovider"
+
+	"gorm.io/gorm"
+)
 
 type AppContext interface {
-	GetMaiDBConnection() *gorm.DB
+	GetMainDBConnection() *gorm.DB
+	UploadProvider() uploadprovider.UploadProvider
+	GetSecretKey() string
 }
 
 type appCtx struct {
-	db *gorm.DB
+	db             *gorm.DB
+	uploadProvider uploadprovider.UploadProvider
+	secretKey      string
 }
 
-func NewAppContext(db *gorm.DB) *appCtx { return &appCtx{db: db} }
+func NewAppContext(db *gorm.DB, uploadProvider uploadprovider.UploadProvider, secretKey string) *appCtx {
+	return &appCtx{
+		db:             db,
+		uploadProvider: uploadProvider,
+		secretKey:      secretKey,
+	}
+}
 
-func (ctx *appCtx) GetMaiDBConnection() *gorm.DB { return ctx.db }
+func (ctx *appCtx) GetMainDBConnection() *gorm.DB { return ctx.db }
+
+func (ctx *appCtx) GetSecretKey() string { return ctx.secretKey }
+
+func (ctx *appCtx) UploadProvider() uploadprovider.UploadProvider {
+	return ctx.uploadProvider
+}

@@ -14,7 +14,7 @@ import (
 func ListRestaurant(appctx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		db := appctx.GetMaiDBConnection()
+		db := appctx.GetMainDBConnection()
 
 		var pagingData common.Paging
 

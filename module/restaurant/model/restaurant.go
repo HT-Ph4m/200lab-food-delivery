@@ -16,9 +16,11 @@ const (
 
 type Restaurant struct {
 	common.SQLModel `json:",inline"`
-	Name            string         `json:"name" gorm:"column:name;"` //tag
-	Addr            string         `json:"addr" gorm:"column:addr;"` //tag
-	Type            RestaurantType `json:"type" gorm:"column:type;"` //tag
+	Name            string         `json:"name" gorm:"column:name;"`   //tag
+	Addr            string         `json:"addr" gorm:"column:addr;"`   //tag
+	Type            RestaurantType `json:"type" gorm:"column:type;"`   //tag
+	Logo            *common.Image  `json:"logo" gorm:"column:logo;"`   //tag
+	Cover           *common.Images `json:"cover" gorm:"column:cover;"` //tag
 }
 
 func (data *Restaurant) Mask(isAdminOrOwner bool) {
@@ -33,8 +35,10 @@ func (Restaurant) TableName() string { return "restaurants" }
 
 type RestaurantCreate struct {
 	common.SQLModel `json:",inline"`
-	Name            string `json:"name" gorm:"column:name;"` //tag
-	Addr            string `json:"addr" gorm:"column:addr;"` //tag
+	Name            string         `json:"name" gorm:"column:name;"`   //tag
+	Addr            string         `json:"addr" gorm:"column:addr;"`   //tag
+	Logo            *common.Image  `json:"logo" gorm:"column:logo;"`   //tag
+	Cover           *common.Images `json:"cover" gorm:"column:cover;"` //tag
 }
 
 func (data *RestaurantCreate) Validate() error {
@@ -46,7 +50,7 @@ func (data *RestaurantCreate) Validate() error {
 	return nil
 }
 
-func (data *RestaurantCreate) Mask(isAdminOrOner bool) {
+func (data *RestaurantCreate) Mask(isAdminOrOwner bool) {
 	data.GenUID(common.DbTypeRestaurant)
 }
 
@@ -54,8 +58,10 @@ func (RestaurantCreate) TableName() string { return Restaurant{}.TableName() }
 
 type RestaurantUpdate struct {
 	common.SQLModel `json:",inline"`
-	Name            *string `json:"name" gorm:"column:name;"` //tag
-	Addr            *string `json:"addr" gorm:"column:addr;"` //tag
+	Name            *string        `json:"name" gorm:"column:name;"`   //tag
+	Addr            *string        `json:"addr" gorm:"column:addr;"`   //tag
+	Logo            *common.Image  `json:"logo" gorm:"column:logo;"`   //tag
+	Cover           *common.Images `json:"cover" gorm:"column:cover;"` //tag
 }
 
 func (RestaurantUpdate) TableName() string { return Restaurant{}.TableName() }

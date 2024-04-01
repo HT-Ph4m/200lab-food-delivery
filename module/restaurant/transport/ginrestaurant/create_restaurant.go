@@ -13,7 +13,7 @@ import (
 
 func CreateRestaurant(appctx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		db := appctx.GetMaiDBConnection()
+		db := appctx.GetMainDBConnection()
 
 		var data restaurantmodel.RestaurantCreate
 
